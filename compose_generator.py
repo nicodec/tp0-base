@@ -25,6 +25,8 @@ def write_server_config(file):
     environment:
       - PYTHONUNBUFFERED=1
       - LOGGING_LEVEL=DEBUG
+    volumes:
+      - ./server/config.ini:/config.ini
     networks:
       - generator_network
 '''
@@ -44,6 +46,8 @@ def write_client(file, num):
     environment:
       - CLI_ID=1
       - CLI_LOG_LEVEL=DEBUG
+    volumes:
+      - ./client/config.yaml:/config.yaml
     networks:
       - generator_network
     depends_on:
