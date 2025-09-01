@@ -30,10 +30,8 @@ class Server:
                 if self._client_socket:
                     self.__handle_client_connection(self._client_socket)
             except (KeyboardInterrupt, SystemExit):
-                logging.info('action: interrupt | result: in_progress')
                 self._handle_sigterm()
             finally:
-                logging.info('action: interrupt | result: done')
                 self._client_socket = None
 
     def __handle_client_connection(self, client_sock):
@@ -70,7 +68,6 @@ class Server:
             logging.info(f'action: accept_connections | result: success | ip: {addr[0]}')
             return c
         except socket.error:
-            logging.info('action: accept_connections | result: socket_closed')
             return None
 
     def _handle_sigterm(self, signum, frame):
@@ -78,9 +75,7 @@ class Server:
         SIGTERM handler
         Starts the graceful shutdown process
         """
-        logging.info('action: handle_sigterm | result: in_progress')
         self._running = False
         self._server_socket.close()
         if self._client_socket:
             self._client_socket.close()
-        logging.info('action: handle_sigterm | result: success')
