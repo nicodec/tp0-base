@@ -60,7 +60,11 @@ def write_network_config(file):
     network_config = '''
 networks:
   generator_network:
-    driver: bridge
+    name: generator_network
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.125.0/24
 '''
     file.write(network_config)
 
