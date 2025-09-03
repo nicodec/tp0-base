@@ -63,7 +63,7 @@ class Server:
             bet = Bet(message_data[0], message_data[1], message_data[2], message_data[3], message_data[4], message_data[5])
             store_bets([bet])
 
-            logging.info(f'action: apuesta_almacenada | result: success | dni: ${bet.document} | numero: ${bet.number}')
+            logging.info(f'action: apuesta_almacenada | result: success | dni: {bet.document} | numero: {bet.number}')
 
             send_message(Message.ack(message.get_seq_number()), client_sock)
         except OSError as e:
