@@ -24,7 +24,6 @@ def write_server_config(file):
     entrypoint: python3 /main.py
     environment:
       - PYTHONUNBUFFERED=1
-      - LOGGING_LEVEL=DEBUG
     networks:
       - generator_network
 '''
@@ -43,7 +42,6 @@ def write_client(file, num):
     entrypoint: /client
     environment:
       - CLI_ID=1
-      - CLI_LOG_LEVEL=DEBUG
     networks:
       - generator_network
     depends_on:
