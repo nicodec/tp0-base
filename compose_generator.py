@@ -24,7 +24,6 @@ def write_server_config(file):
     entrypoint: python3 /main.py
     environment:
       - PYTHONUNBUFFERED=1
-      - LOGGING_LEVEL=DEBUG
     volumes:
       - ./server/config.ini:/config.ini
     networks:
@@ -44,7 +43,6 @@ def write_client(file, num):
     image: client:latest
     environment:
       - CLI_ID=1
-      - CLI_LOG_LEVEL=DEBUG
       - NOMBRE=Santiago Lionel
       - APELLIDO=Lorca
       - DOCUMENTO=30904465
