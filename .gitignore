@@ -5,3 +5,16 @@
 bin/
 
 .idea/
+
+tp0-base.iml
+
+server/server.iml
+server/common/message.py
+server/common/socket_utils.py
+
+client/client.iml
+client/infrastructure/common/message.py
+client/infrastructure/common/socket_utils.py
+
+common/common.iml
+

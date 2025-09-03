@@ -42,10 +42,14 @@ def write_client(file, num):
     client_config = f'''  client{num}:
     container_name: client{num}
     image: client:latest
-    entrypoint: /client
     environment:
       - CLI_ID=1
       - CLI_LOG_LEVEL=DEBUG
+      - NOMBRE=Santiago Lionel
+      - APELLIDO=Lorca
+      - DOCUMENTO=30904465
+      - NACIMIENTO=1999-03-17
+      - NUMERO=7574
     volumes:
       - ./client/config.yaml:/config.yaml
     networks:

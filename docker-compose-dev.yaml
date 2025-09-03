@@ -1,4 +1,3 @@
-name: tp0
 services:
   server:
     container_name: server
@@ -7,23 +6,31 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - LOGGING_LEVEL=DEBUG
+    volumes:
+      - ./server/config.ini:/config.ini
     networks:
-      - testing_net
-
+      - generator_network
   client1:
     container_name: client1
     image: client:latest
-    entrypoint: /client
     environment:
       - CLI_ID=1
       - CLI_LOG_LEVEL=DEBUG
+      - NOMBRE=Santiago Lionel
+      - APELLIDO=Lorca
+      - DOCUMENTO=30904465
+      - NACIMIENTO=1999-03-17
+      - NUMERO=7574
+    volumes:
+      - ./client/config.yaml:/config.yaml
     networks:
-      - testing_net
+      - generator_network
     depends_on:
       - server
 
 networks:
-  testing_net:
+  generator_network:
+    name: generator_network
     ipam:
       driver: default
       config:

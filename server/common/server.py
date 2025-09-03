@@ -2,6 +2,10 @@ import socket
 import logging
 import signal
 
+from common.message import Message, ErrorCode
+from common.socket_utils import recv_message, send_message
+from common.utils import Bet, store_bets
+
 
 class Server:
     def __init__(self, port, listen_backlog):
@@ -43,13 +47,27 @@ class Server:
         """
         try:
             # TODO: Modify the receive to avoid short-reads
-            msg = client_sock.recv(1024).rstrip().decode('utf-8')
-            addr = client_sock.getpeername()
-            logging.info(f'action: receive_message | result: success | ip: {addr[0]} | msg: {msg}')
-            # TODO: Modify the send to avoid short-writes
-            client_sock.send("{}\n".format(msg).encode('utf-8'))
+            message = recv_message(socket=client_sock)
+            if not message:
+                return
+
+            if message.get_data_size() != len(message.get_data()):
+                logging.debug(f"action: receive_message | result: fail | error: {ErrorCode.MISSING_DATA}")
+                message.set_timeout(2)
+                send_message(Message.error(ErrorCode.MISSING_DATA, message.get_seq_number), client_sock)
+                while not message.is_timeout() and (not message or message.get_data_size() != len(message.get_data())):
+                    message = recv_message(socket=client_sock)
+
+            message_data = message.get_data_as_string().split(',')
+
+            bet = Bet(message_data[0], message_data[1], message_data[2], message_data[3], message_data[4], message_data[5])
+            store_bets([bet])
+
+            logging.info(f'action: apuesta_almacenada | result: success | dni: ${bet.document} | numero: ${bet.number}')
+
+            send_message(Message.ack(message.get_seq_number()), client_sock)
         except OSError as e:
-            logging.error("action: receive_message | result: fail | error: {e}")
+            logging.error(f"action: receive_message | result: fail | error: {e}")
         finally:
             client_sock.close()
 
